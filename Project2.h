@@ -17,4 +17,7 @@ vector<Quote> loadQuotes(const string& filename, const vector<string>& adjective
 // Function to load adjectives from txt file 
 vector<string> loadAdjectives(const string& filename);
 
+// Function to detect emotional state and generate the corresponding inspirational quote
+void detectUserEmotionalStateAndGenerateQuote(const vector<string>& adjectives, const vector<Quote>& quotes);
+
 #endif
