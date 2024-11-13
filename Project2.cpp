@@ -9,28 +9,29 @@
 using namespace std;
 
 // Function to load adjectives from a file
-vector<string> loadAdjectives(const string& filename) {
-    vector<string> adjectives;
+vector<string>* loadAdjectives(const string& filename) {
+    vector<string>* adjectives = new vector<string>; // allocating memeory dynamically for the vector
     ifstream file(filename);
     string word;
 
     if (file.is_open()) {
         while (getline(file, word)) {
-            adjectives.push_back(word);
+            adjectives->push_back(word);
         }
         file.close();
     }
     else {
         cerr << "Unable to open file: " << filename << endl;
-        return {};  // Return an empty vector if file cannot be opened
+        delete adjectives; // Clean up memory if the file cannot be opened
+        return nullptr;    // Return null pointer to indicate failure
     }
 
     return adjectives;
 }
 
 // Function to load quotes from a file and match with adjectives
-vector<Quote> loadQuotes(const string& filename, const vector<string>& adjectives) {
-    vector<Quote> quotes;
+vector<Quote>* loadQuotes(const string& filename, const vector<string>* adjectives) {
+    vector<Quote>* quotes = new vector<Quote>; // allocating memory dynamically to vector
     ifstream file(filename);
     string line;
 
@@ -38,11 +39,11 @@ vector<Quote> loadQuotes(const string& filename, const vector<string>& adjective
         int index = 0;
         while (getline(file, line)) {
             // Avoid exceeding the number of adjectives
-            if (index < adjectives.size()) {
+            if (index < adjectives->size()) {
                 Quote q;
-                q.adjective = adjectives[index];
+                q.adjective = (*adjectives)[index]; // access vector element through pointer dereferencing
                 q.quote = line;
-                quotes.push_back(q);
+                quotes->push_back(q);
                 index++;
             }
             else {
@@ -53,13 +54,15 @@ vector<Quote> loadQuotes(const string& filename, const vector<string>& adjective
     }
     else {
         cerr << "Unable to open file: " << filename << endl;
+        delete quotes; // Clean up memory if the file cannot be opened
+        return nullptr; // Return null pointer to indicate failure
     }
 
     return quotes;
 }
 
 // Function to detect emotional state and generate the corresponding inspirational quote
-void detectUserEmotionalStateAndGenerateQuote(const vector<string>& adjectives, const vector<Quote>& quotes) {
+void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes) {
     string userInput;
     cout << "Please describe your emotional state in a few sentences by including descriptive adjectives: ";
     getline(cin, userInput);
@@ -74,7 +77,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>& adjectives, 
         transform(word.begin(), word.end(), word.begin(), ::tolower); // Convert word to lowercase
 
         // Check if the word is in the list of adjectives
-        if (find(adjectives.begin(), adjectives.end(), word) != adjectives.end()) {
+        if (find(adjectives->begin(), adjectives->end(), word) != adjectives->end()) {
             detectedAdjectives.push_back(word);
         }
     }
@@ -82,7 +85,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>& adjectives, 
     // If adjectives were detected, find matching quotes
     if (!detectedAdjectives.empty()) {
         for (const string& detected : detectedAdjectives) {
-            for (const auto& quote : quotes) {
+            for (const auto& quote : *quotes) {
                 if (quote.adjective == detected) {
                     cout << "Detected emotional state: " << detected << endl;
                     cout << "Inspirational Quote: " << quote.quote << endl;
