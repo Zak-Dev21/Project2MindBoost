@@ -1,2 +1,3 @@
-# Project2MindBoost
-MindBoost is a C++ program that promotes mental wellness by providing personalized, inspirational quotes based on user input. It analyzes keywords to deliver uplifting messages and collects data on hobbies and activities to suggest lifestyle improvements. The program utilizes intermediate C++ concepts for functionality and efficiency.
+**Author:** Zakaria Bouaddou
+
+**Project Objective:** MindBoost aims to promote mental wellness through a C++ program that delivers personalized, inspirational quotes and lifestyle suggestions based on user input. By analyzing keywords and collecting user data such as mood and hobbies, MindBoost tailors motivational content and supports a balanced lifestyle. The project will implement intermediate C++ concepts, including arrays, pointers, string handling, structures, enumerations, and file stream operations. Emphasis will be placed on efficient memory management, optimized data structures, and clear code documentation to meet functional and performance standards.
