@@ -5,8 +5,19 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
+
+// Helper function to check if a word is valid (only contains alphabetic characters)
+bool isValidWord(const string& word) {
+    for (char ch : word) {
+        if (!isalpha(ch)) { // Checks if the character is not a letter
+            return false;
+        }
+    }
+    return true;
+}
 
 // Function to load adjectives from a file
 vector<string>* loadAdjectives(const string& filename) {
@@ -63,42 +74,59 @@ vector<Quote>* loadQuotes(const string& filename, const vector<string>* adjectiv
 
 // Function to detect emotional state and generate the corresponding inspirational quote
 void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes) {
-    string userInput;
-    cout << "Please describe your emotional state in a few sentences by including descriptive adjectives: ";
-    getline(cin, userInput);
-    stringstream inputStream(userInput);
-    string word;
-    bool stateDetected = false;
+    bool validInput = false;
 
-    vector<string> detectedAdjectives;
+    while (!validInput) {
+        string userInput;
+        cout << "Please describe your emotional state in a few sentences by including descriptive adjectives: ";
+        getline(cin, userInput);
+        stringstream inputStream(userInput);
+        string word;
+        bool stateDetected = false;
+        bool invalidInputDetected = false;
 
-    // Convert user input to lowercase and check for matching adjectives
-    while (inputStream >> word) {
-        transform(word.begin(), word.end(), word.begin(), ::tolower); // Convert word to lowercase
+        vector<string> detectedAdjectives;
 
-        // Check if the word is in the list of adjectives
-        if (find(adjectives->begin(), adjectives->end(), word) != adjectives->end()) {
-            detectedAdjectives.push_back(word);
-        }
-    }
+        // Convert user input to lowercase and check for matching adjectives
+        while (inputStream >> word) {
+            transform(word.begin(), word.end(), word.begin(), ::tolower); // Convert word to lowercase
 
-    // If adjectives were detected, find matching quotes
-    if (!detectedAdjectives.empty()) {
-        for (const string& detected : detectedAdjectives) {
-            for (const auto& quote : *quotes) {
-                if (quote.adjective == detected) {
-                    cout << "Detected emotional state: " << detected << endl;
-                    cout << "Inspirational Quote: " << quote.quote << endl;
-                    stateDetected = true;
-                    break;
+            // Check if the word is valid
+            if (isValidWord(word)) {
+                // Check if the word is in the list of adjectives
+                if (find(adjectives->begin(), adjectives->end(), word) != adjectives->end()) {
+                    detectedAdjectives.push_back(word);
                 }
             }
-            if (stateDetected) break;  // Exit the loop once a quote is found
+            else {
+                invalidInputDetected = true;
+            }
         }
-    }
 
-    if (!stateDetected) {
-        cout << "No adjectives detected in your input. Please try using more descriptive adjectives." << endl;
+        // Notify the user if any invalid input was detected
+        if (invalidInputDetected) {
+            cout << "You entered invalid input. Please enter words without numbers or gibberish." << endl;
+            continue; // Prompt the user to enter input again
+        }
+
+        // If adjectives were detected, find matching quotes
+        if (!detectedAdjectives.empty()) {
+            for (const string& detected : detectedAdjectives) {
+                for (const auto& quote : *quotes) {
+                    if (quote.adjective == detected) {
+                        cout << "Detected emotional state: " << detected << endl;
+                        cout << "Inspirational Quote: " << quote.quote << endl;
+                        stateDetected = true;
+                        break;
+                    }
+                }
+                if (stateDetected) break;  // Exit the loop once a quote is found
+            }
+            validInput = true; // Set valid input to true if processing was successful
+        }
+        else {
+            cout << "No valid adjectives detected in your input. Please try using more descriptive words." << endl;
+        }
     }
 }
 
