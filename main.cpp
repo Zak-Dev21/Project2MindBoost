@@ -42,10 +42,19 @@ int main() {
     generalInterestHobbies["music"] = { "playing an instrument", "singing", "composing", "listening to music" };
     generalInterestHobbies["sports"] = { "soccer", "basketball", "tennis", "swimming" };
 
+    // Initialize user profile
+    UserProfile userProfile;
+    userProfile.name = "Zak B";  // You can change this to prompt for name input
+
     // Call the function to detect emotional state and generate the corresponding quote
-    detectUserEmotionalStateAndGenerateQuote(adjectives, quotes, &interests, generalInterestQuotes, &generalInterestHobbies);
+    detectUserEmotionalStateAndGenerateQuote(adjectives, quotes, &interests, generalInterestQuotes, &generalInterestHobbies, userProfile);
     
-    
+    // Print out the user's quote history (optional, for debugging or visualization)
+    cout << "\nUser's Quote History: " << endl;
+    for (const Quote& quote : userProfile.quoteHistory.history) {
+        cout << "Adjective: " << quote.adjective << " | Quote: " << quote.quote << endl;
+    }
+
     // Clean up dynamically allocated memory
     delete adjectives;
     delete quotes;
