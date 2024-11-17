@@ -63,7 +63,7 @@ int main() {
 
         // Ask the user if they want to run the program again
         string userChoice;
-        cout << "\nWould you like to try again? (yes/no): ";
+        cout << "\nWould you like to try again? (yes/any other key to exit): ";
         getline(cin, userChoice);
 
         // Convert the user's input to lowercase for consistency
