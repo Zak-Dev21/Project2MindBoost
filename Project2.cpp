@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <map>
 
+
 using namespace std;
 
 //Function to check if user enter appropriate number for interest selection
@@ -148,9 +149,9 @@ map<string, vector<Quote>>* loadGeneralInterestQuotes(const string& filename) {
 }
 
 // Function to detect emotional state and generate the corresponding inspirational quote
-void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes, map<string, vector<string>>* generalInterestHobbies) {
+void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes, map<string, vector<string>>* generalInterestHobbies, UserProfile& userProfile) {
     bool validInput = false;
-    srand(time(0)); // Randomization seed
+    srand(static_cast<unsigned int>(time(0))); // Randomization seed
 
     // Let the user select an interest
     cout << "Please select a general interest:\n";
@@ -159,8 +160,6 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
     }
     // Use getUserInterestChoice to get a valid choice
     int interestChoice = getUserInterestChoice(1, 4); // Min choice is 1, max choice is 4
-    
-
     string selectedInterest = (*interests)[interestChoice - 1];
     transform(selectedInterest.begin(), selectedInterest.end(), selectedInterest.begin(), ::tolower); // Normalize input to lowercase
 
@@ -176,7 +175,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
         cout << (hobbiesForInterest.size() + 1) << ". Other (please describe your own hobby)\n";
 
         // Let the user select a hobby
-        int hobbyChoice = getUserInterestChoice(1, hobbiesForInterest.size() + 1);
+        int hobbyChoice = getUserInterestChoice(1, static_cast<int>(hobbiesForInterest.size()) + 1);
         string selectedHobby;
         if (hobbyChoice == hobbiesForInterest.size() + 1) {
             cout << "Please describe your hobby/activity: ";
@@ -186,7 +185,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
             selectedHobby = hobbiesForInterest[hobbyChoice - 1];
         }
         cout << "You selected the hobby: " << selectedHobby << endl;
-
+        userProfile.hobbies.push_back(selectedHobby);
         // Now we generate the motivational message
         cout << "\nMotivational Message:\n";
         cout << "During your free time, incorporate " << selectedHobby << " to zone out of work or stress. ";
@@ -196,6 +195,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
         cout << "No hobbies available for the selected interest." << endl;
     }
 
+    // Now ask for the user's emotional state after the motivational message
     while (!validInput) {
         string userInput;
         cout << "Please describe your mood (emotional state) in a few sentences by including descriptive adjectives: ";
@@ -236,6 +236,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
                     if (quote.adjective == detected) {
                         cout << "Detected emotional state: " << detected << endl;
                         cout << "Inspirational Quote: " << quote.quote << endl;
+                        userProfile.quoteHistory.history.push_back(quote);
                         stateDetected = true;
                         break;
                     }
@@ -257,6 +258,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
             // Randomly select a quote from the available quotes for the selected interest
             int randomIndex = rand() % quotesForInterest.size();
             cout << "Quote: " << quotesForInterest[randomIndex].quote << endl;
+            userProfile.quoteHistory.history.push_back(quotesForInterest[randomIndex]);
         }
         else {
             cout << "No quotes available for the selected interest." << endl;
@@ -266,6 +268,7 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
         cout << "No quotes available for the selected interest." << endl;
     }
 }
+
 
 
 
