@@ -28,8 +28,8 @@ vector<Quote>* loadQuotes(const string& filename, const vector<string>* adjectiv
 // Function to load adjectives from txt file 
 vector<string>* loadAdjectives(const string& filename);
 
-// Function to detect emotional state and generate the corresponding inspirational quote
-void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes);
+// Function to detect emotional state as well as general interest and hobby to generate the corresponding inspirational quotes and motivational message
+void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes, map<string, vector<string>>* generalInterestHobbies);
 
 map<string, vector<Quote>>* loadGeneralInterestQuotes(const string& filename);
 #endif

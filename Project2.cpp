@@ -148,7 +148,7 @@ map<string, vector<Quote>>* loadGeneralInterestQuotes(const string& filename) {
 }
 
 // Function to detect emotional state and generate the corresponding inspirational quote
-void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes) {
+void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, const vector<Quote>* quotes, const vector<string>* interests, const map<string, vector<Quote>>* generalInterestQuotes, map<string, vector<string>>* generalInterestHobbies) {
     bool validInput = false;
     srand(time(0)); // Randomization seed
 
@@ -163,6 +163,38 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
 
     string selectedInterest = (*interests)[interestChoice - 1];
     transform(selectedInterest.begin(), selectedInterest.end(), selectedInterest.begin(), ::tolower); // Normalize input to lowercase
+
+    // Display hobbies related to the selected interest
+    cout << "\nPlease select a hobby related to " << selectedInterest << ":\n";
+    int interestIndex = interestChoice - 1;  // Get the index of the selected interest
+
+    if (generalInterestHobbies->find(selectedInterest) != generalInterestHobbies->end()) {
+        const auto& hobbiesForInterest = (*generalInterestHobbies).at(selectedInterest);
+        for (int i = 0; i < hobbiesForInterest.size(); i++) {
+            cout << (i + 1) << ". " << hobbiesForInterest[i] << endl;
+        }
+        cout << (hobbiesForInterest.size() + 1) << ". Other (please describe your own hobby)\n";
+
+        // Let the user select a hobby
+        int hobbyChoice = getUserInterestChoice(1, hobbiesForInterest.size() + 1);
+        string selectedHobby;
+        if (hobbyChoice == hobbiesForInterest.size() + 1) {
+            cout << "Please describe your hobby/activity: ";
+            getline(cin, selectedHobby);
+        }
+        else {
+            selectedHobby = hobbiesForInterest[hobbyChoice - 1];
+        }
+        cout << "You selected the hobby: " << selectedHobby << endl;
+
+        // Now we generate the motivational message
+        cout << "\nMotivational Message:\n";
+        cout << "During your free time, incorporate " << selectedHobby << " to zone out of work or stress. ";
+        cout << "Also consider exploring more topics about " << selectedInterest << " to expand your interests and refresh your mind!" << endl;
+    }
+    else {
+        cout << "No hobbies available for the selected interest." << endl;
+    }
 
     while (!validInput) {
         string userInput;
