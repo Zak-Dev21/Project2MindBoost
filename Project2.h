@@ -16,6 +16,12 @@ struct Quote {
 };
 
 
+// Function to check if user inputs appropriate input when describing emotional state (mood)
+bool isValidWord(const string& word);
+
+//Function to detect valid input when choosing interest
+int getUserInterestChoice(int minChoice, int maxChoice);
+
 // Function to load quotes from a file and store them in a vector
 vector<Quote>* loadQuotes(const string& filename, const vector<string>* adjectives);
 

@@ -12,6 +12,35 @@
 
 using namespace std;
 
+//Function to check if user enter appropriate number for interest selection
+int getUserInterestChoice(int minChoice, int maxChoice) {
+    int choice = 0;
+    bool validInput = false;
+
+    while (!validInput) {
+        cout << "Enter the number for your interest (" << minChoice << " to " << maxChoice << "): ";
+
+        // Check if the input is a valid integer
+        if (cin >> choice) {
+            // Check if the choice is within the valid range
+            if (choice >= minChoice && choice <= maxChoice) {
+                validInput = true;
+            }
+            else {
+                cout << "Invalid choice. Please select a number between " << minChoice << " and " << maxChoice << "." << endl;
+            }
+        }
+        else {
+            // If input is not a number, handle the error
+            cout << "Invalid input. Please enter a valid number between " << minChoice << " and " << maxChoice << "." << endl;
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore any invalid input in the buffer
+        }
+    }
+
+    return choice;
+}
+
 
 // Helper function to check if a word is valid (only contains alphabetic characters)
 bool isValidWord(const string& word) {
@@ -128,10 +157,9 @@ void detectUserEmotionalStateAndGenerateQuote(const vector<string>* adjectives, 
     for (int i = 0; i < interests->size(); i++) {
         cout << (i + 1) << ". " << (*interests)[i] << endl;
     }
-    int interestChoice;
-    cout << "Enter the number for your interest: ";
-    cin >> interestChoice;
-    cin.ignore();  // Clear the newline from the input buffer
+    // Use getUserInterestChoice to get a valid choice
+    int interestChoice = getUserInterestChoice(1, 4); // Min choice is 1, max choice is 4
+    
 
     string selectedInterest = (*interests)[interestChoice - 1];
     transform(selectedInterest.begin(), selectedInterest.end(), selectedInterest.begin(), ::tolower); // Normalize input to lowercase
