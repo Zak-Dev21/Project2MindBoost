@@ -1,36 +1,40 @@
 #include <iostream>
 #include <vector>
-#include <sstream>
-#include <algorithm>
+#include <map>
 #include "Project2.h"
 using namespace std;
 
-
-
+// Main function
 int main() {
-    vector<string>* adjectives = loadAdjectives("Adjectives.txt");
+    // Load adjectives
+    vector<string>* adjectives = loadAdjectives("adjectives.txt");
+    if (!adjectives) return 1;
 
-    if (adjectives != nullptr && !adjectives->empty()) {
-        // Load quotes based on the adjectives
-        vector<Quote>* quotes = loadQuotes("Quotes.txt", adjectives);
-
-        if (quotes != nullptr && !quotes->empty()) {
-            // Detect user's emotional state based on input and provide an inspirational quote
-            detectUserEmotionalStateAndGenerateQuote(adjectives, quotes);
-            delete quotes;
-        }
-        else {
-            cerr << "Quotes could not be loaded. Please check the Quotes.txt file." << endl;
-            delete quotes;
-        }
-
+    // Load quotes for emotional states
+    vector<Quote>* quotes = loadQuotes("quotes.txt", adjectives);
+    if (!quotes) {
         delete adjectives;
+        return 1;
     }
-    else {
-        cerr << "Adjectives could not be loaded. Please check the Adjectives.txt file." << endl;
+
+    // Define interests
+    vector<string> interests = { "arts", "games", "music", "sports" };
+
+    // Load general interest quotes
+    map<string, vector<Quote>>* generalInterestQuotes = loadGeneralInterestQuotes("quotesInterests.txt");
+    if (!generalInterestQuotes) {
         delete adjectives;
+        delete quotes;
+        return 1;
     }
+
+    // Detect emotional state and generate quotes
+    detectUserEmotionalStateAndGenerateQuote(adjectives, quotes, &interests, generalInterestQuotes);
+
+    // Clean up dynamically allocated memory
+    delete adjectives;
+    delete quotes;
+    delete generalInterestQuotes;
 
     return 0;
 }
-
