@@ -1,7 +1,7 @@
 **Author:** Zakaria Bouaddou
 
 
-**Project Objective:** MindBoost aims to promote mental wellness through a C++ program that delivers personalized, inspirational quotes and lifestyle suggestions based on user input. By analyzing keywords and collecting user data such as mood and hobbies, MindBoost tailors motivational content and supports a balanced lifestyle. The project will implement intermediate C++ concepts, including arrays, pointers, string handling, structures, enumerations, and file stream operations. Emphasis will be placed on efficient memory management, optimized data structures, and clear code documentation to meet functional and performance standards.
+**Project Objective:** MindBoost aims to promote mental wellness through a C++ program that delivers personalized, inspirational quotes and lifestyle suggestions based on user input. By analyzing keywords and collecting user data such as mood and hobbies, MindBoost tailors motivational content and supports a balanced lifestyle. The project implements intermediate C++ concepts, including pointers, string handling, structures, file stream operations, and dynamic memory management. Emphasis is placed on efficient data structures, optimized performance, and clear code documentation to meet functional and performance standards.
 
 **Video Recording:**
 
